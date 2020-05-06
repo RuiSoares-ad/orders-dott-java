@@ -1,5 +1,6 @@
 package pt.dott.backend.data;
 
+import pt.dott.backend.entity.Customer;
 import pt.dott.backend.entity.Item;
 import pt.dott.backend.entity.Order;
 import pt.dott.backend.entity.Product;
@@ -19,10 +20,10 @@ public class DataGenerator {
     public List<Order> generateOrders(){
         List <Order> allOrders = new ArrayList<>();
 
-
-        for(String name : customerNames()){
+        for(Customer customer : customerNames()){
             List<Item> itemsList = Items.generateRandomList();
-            allOrders.add(new Order(name, name + "@dott.pt", getRandomAddress(), calculateOrderTotal(itemsList), getRandomDate(), Items.generateRandomList()));
+            allOrders.add(new Order(customer.getCustomerName(), customer.getCustomerName() + "@dott.pt", getRandomAddress(), calculateOrderTotal(itemsList), getRandomDate(), Items.generateRandomList()));
+
         }
 
         return allOrders;
@@ -42,7 +43,7 @@ public class DataGenerator {
         return Address.districts.get(new Random().nextInt(Address.districts.size()-1));
     }
 
-    private List<String> customerNames(){
+    private List<Customer> customerNames(){
         return CustomerName.getRandomNamesList();
     }
 

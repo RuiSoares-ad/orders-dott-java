@@ -26,7 +26,9 @@ public class OrdersRepository {
     public OrdersRepository(LocalDateTime startDate, LocalDateTime endDate){
         dataGenerator = new DataGenerator();
         this.orders = dataGenerator.generateOrders();
+        System.out.println("Total Orders : " + orders.size());
         this.ordersBetween = getAllOrdersBetween(orders, startDate, endDate);
+        System.out.println("Orders from " + startDate.toString() + " to " + endDate.toString() + " : " + ordersBetween.size());
     }
 
     private List<Order> getAllOrdersBetween(List <Order> allOrders, LocalDateTime startDate, LocalDateTime endDate){

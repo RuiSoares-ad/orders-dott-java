@@ -10,8 +10,6 @@ import java.util.Random;
 
 public class Items {
 
-    private List<Item> dummyItems;
-
     public static List<Item> generateRandomList(){
         List<Item> dummyItems = new ArrayList<>();
         int listSize = new Random().nextInt(5);

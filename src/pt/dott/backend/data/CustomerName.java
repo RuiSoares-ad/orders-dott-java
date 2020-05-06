@@ -1,5 +1,7 @@
 package pt.dott.backend.data;
 
+import pt.dott.backend.entity.Customer;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -7,7 +9,7 @@ import java.util.Random;
 
 public class CustomerName {
 
-    private final static int NUM_COSTUMERS = 200;
+    private final static int NUM_COSTUMERS = 10000;
 
     private static final List<String> names = Arrays.asList("Ana", "Andreia", "Adriana", "Adriano", "André", "Ângela",
             "Adélia", "Amilcar", "Adolfo", "Alexandre", "Amadeu", "Anabela", "Aurea", "Américo", "Aníbal", "Angélica", "Armando",
@@ -35,14 +37,14 @@ public class CustomerName {
             "Ulisses", "Ulmira", "Valentina", "Valentim", "Vitória", "Vasco", "Vítor", "Valdemar", "Valéria", "Vera", "Verónica",
             "Virgínia", "Violeta", "Viviana", "Vicente", "Vitorino", "Virgílio", "Xavier", "Zulmira", "Vânia");
 
-    public static List<String> getRandomNamesList() {
-        List<String> namesList = new ArrayList<>();
+    public static List<Customer> getRandomNamesList() {
+        List<Customer> namesList = new ArrayList<>();
 
         for(int i = 0; i != NUM_COSTUMERS; i++){
-            namesList.add(names.get(new Random().nextInt(names.size()-1)));
+            namesList.add(new Customer(names.get(new Random().nextInt(names.size()-1))));
         }
 
-        return names;
+        return namesList;
     }
 
 }

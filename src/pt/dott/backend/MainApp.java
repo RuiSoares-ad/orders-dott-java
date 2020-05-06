@@ -28,7 +28,6 @@ public class MainApp {
             return;
         }
 
-
         OrdersRepository repository = new OrdersRepository(startDate, endDate);
         calculateOrders(repository, args);
 
@@ -37,6 +36,9 @@ public class MainApp {
     private static void calculateOrders(OrdersRepository repository, String [] args){
         CustomIntervals customIntervals = new CustomIntervals(args);
         if(customIntervals.getIntervalsList().size()>0){
+            System.out.println("RESULT DEFAULT INTERVALS: \n");
+            calculateOrdersDefaultInterval(repository);
+            System.out.println("\nRESULT CUSTOM INTERVALS: \n");
             calculateOrdersCustomIntervals(repository, customIntervals.getIntervalsList());
         } else {
             calculateOrdersDefaultInterval(repository);
@@ -73,10 +75,11 @@ public class MainApp {
             try {
                 calc.join();
             } catch (InterruptedException e) {
+                System.out.println(calc.getName() + " has been interrupted!");
                 e.printStackTrace();
             }
         }
-        System.out.println("RESULT: \n");
+
         for(OrdersCalculator calc : calculatorList){
 
             System.out.println(calc.getLowerValue() + (checkIntegerValue(calc.getLowerValue()) ? "-" : "") + calc.getHigherValue()+ " months : " + calc.getResultCount() +  " orders");
