@@ -3,8 +3,6 @@ package pt.dott.backend.data;
 import pt.dott.backend.entity.Customer;
 import pt.dott.backend.entity.Item;
 import pt.dott.backend.entity.Order;
-import pt.dott.backend.entity.Product;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -30,7 +28,7 @@ public class DataGenerator {
     }
 
     private BigDecimal calculateOrderTotal(List<Item> itemList){
-        BigDecimal total = new BigDecimal(0.0);
+        BigDecimal total = new BigDecimal("0.0");
 
         for(Item item : itemList){
             total.add(item.getCost());

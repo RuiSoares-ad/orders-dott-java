@@ -2,6 +2,7 @@ package pt.dott.backend;
 
 import pt.dott.backend.calculator.OrdersCalculator;
 import pt.dott.backend.repository.OrdersRepository;
+import pt.dott.backend.validator.ValidationUtils;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -15,16 +16,12 @@ public class MainApp {
 
     private static LocalDateTime startDate;
     private static LocalDateTime endDate;
-    private static String dateFormat = "yyyy-MM-dd HH:mm:ss";
 
 
     public static void main(String[] args) {
 
-        if(lessParameters(args)){
-            return;
-        }
-
-        if(!validateDates(args)){
+        if(lessParameters(args) || !validateDates(args)){
+            ValidationUtils.printInvalidDateParametersMessages();
             return;
         }
 
@@ -35,13 +32,11 @@ public class MainApp {
 
     private static void calculateOrders(OrdersRepository repository, String [] args){
         CustomIntervals customIntervals = new CustomIntervals(args);
+        System.out.println("RESULT DEFAULT INTERVALS: \n");
+        calculateOrdersDefaultInterval(repository);
         if(customIntervals.getIntervalsList().size()>0){
-            System.out.println("RESULT DEFAULT INTERVALS: \n");
-            calculateOrdersDefaultInterval(repository);
             System.out.println("\nRESULT CUSTOM INTERVALS: \n");
             calculateOrdersCustomIntervals(repository, customIntervals.getIntervalsList());
-        } else {
-            calculateOrdersDefaultInterval(repository);
         }
     }
 
@@ -89,31 +84,28 @@ public class MainApp {
     private static boolean checkIntegerValue(String value){
         try{
             Integer.parseInt(value);
+            return true;
         }catch(NumberFormatException e){
             return false;
         }
-        return true;
     }
 
     private static boolean lessParameters(String [] args){
-        if(args.length < 2){
-            System.out.println("Parameters not valid. You should provide two parameters, startDate and endDate in this date format YYYY-MM-DD HH:MM:SS");
-            return true;
-        }
-        return false;
+        return args.length<2;
     }
 
     private static boolean validateDates(String [] args){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         try {
             startDate = LocalDateTime.parse(args[0], formatter);
             endDate = LocalDateTime.parse(args[1], formatter);
+            return true;
         } catch (DateTimeParseException e) {
-            System.out.println("Date format is invalid. Check provided dates and try again");
             return false;
         }
-        return true;
     }
+
+
 
 
 

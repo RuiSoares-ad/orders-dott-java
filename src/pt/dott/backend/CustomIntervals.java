@@ -1,8 +1,10 @@
 package pt.dott.backend;
 
+import pt.dott.backend.validator.ValidationUtils;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
 
 public class CustomIntervals {
 
@@ -14,28 +16,27 @@ public class CustomIntervals {
     }
 
     private void validateArgs(String [] args){
+        List <String> invalid = new ArrayList<>();
         for(int i = 2; i != args.length; i++){
             if(args[i].contains("-")){
                 String [] interval = args[i].split("-");
-                if(validIntervalLength(null, interval)){
-                    if(validateInterval(interval)){
-                        intervalsList.add(interval);
-                    }
-                }
-
+                if (validate(interval)) intervalsList.add(interval);
+                else invalid.add(args[i]);
             }
-            String comparator;
-            if(args[i].contains(">") || args[i].contains("<")){
-                comparator = String.valueOf(args[i].charAt(0));
+            else if(args[i].contains(">") || args[i].contains("<")){
+                String comparator = String.valueOf(args[i].charAt(0));
                 String [] interval = args[i].split(comparator);
-                if(validIntervalLength(comparator,interval)){
-                    if(validIntervalComparator(interval)){
-                        interval[0] = comparator;
-                        intervalsList.add(interval);
-                    }
-                }
+                if (validate(interval)){ interval[0] = comparator; intervalsList.add(interval);}
+                else{ invalid.add(args[i]);}
+            } else {
+                invalid.add(args[i]);
             }
         }
+        ValidationUtils.printInvalidIntervalParameters(invalid);
+    }
+
+    private boolean validate(String []interval){
+        return validIntervalLength(interval) && (validateInterval(interval) || validIntervalComparator(interval));
     }
 
     private boolean validateInterval(String [] interval){
@@ -43,10 +44,8 @@ public class CustomIntervals {
             try{
                 Integer.parseInt(interval[i]);
             } catch(NumberFormatException e){
-                System.out.println("Insert a valid number");
                 return false;
             }
-
         }
         return true;
     }
@@ -54,25 +53,19 @@ public class CustomIntervals {
     private boolean validIntervalComparator(String [] interval){
             try{
                 Integer.parseInt(interval[1]);
+                return true;
             } catch(NumberFormatException e){
-                System.out.println("Insert a valid number");
                 return false;
             }
-            return true;
 
     }
 
-    private boolean validIntervalLength(String comparator,String [] interval ){
+    private boolean validIntervalLength(String [] interval ){
            return interval.length==2;
-
-
     }
 
     public List<String[]> getIntervalsList() {
         return intervalsList;
     }
 
-    public void setIntervalsList(List<String[]> intervalsList) {
-        this.intervalsList = intervalsList;
-    }
 }

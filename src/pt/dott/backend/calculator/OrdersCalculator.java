@@ -3,8 +3,6 @@ package pt.dott.backend.calculator;
 
 import pt.dott.backend.entity.Order;
 import pt.dott.backend.repository.OrdersRepository;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -27,17 +25,15 @@ public class OrdersCalculator extends Thread {
     @Override
     public void run() {
         List<Order> periodOrders = repository.getOrdersBetween();
-        calculateOrdersByInterval(periodOrders, lowerValue, higherValue);
-        /*System.out.println(Thread.currentThread() + " " + );*/
+        resultCount = calculateOrdersByInterval(periodOrders, lowerValue, higherValue);
     }
 
     private Integer calculateOrdersByInterval(List <Order> periodOrders, String lowerValue, String higherValue){
 
-
         if(validateMonths(lowerValue, higherValue)){
-            resultCount = getCountProductAgeGroupByOrders(periodOrders, startMonthAge, endMonthAge);
+            return getCountProductAgeGroupByOrders(periodOrders, startMonthAge, endMonthAge);
         } else if(validateMonthComparator(lowerValue, higherValue)) {
-            resultCount = getCountProductAgeComparatorByOrders(periodOrders, lowerValue, endMonthAge);
+            return getCountProductAgeComparatorByOrders(periodOrders, lowerValue, endMonthAge);
         }
 
         return resultCount;
@@ -50,83 +46,39 @@ public class OrdersCalculator extends Thread {
         return repository.getProductsByAgeInterval(periodOrders, startMonthAge, endMonthAge).size();
     }
 
-    private void calculateOrdersByOperator(String operatorInterval){
-        String [] months = operatorInterval.split(String.valueOf(operatorInterval.charAt(0)));
-
-    }
-
     private boolean validateMonthComparator(String comparator, String referenceMonth){
         if(comparator.equals("<") || comparator.equals(">")){
             try{
                 endMonthAge = Integer.parseInt(referenceMonth);
+                return true;
             }catch(NumberFormatException ex){
-                System.out.println("Insert a valid number");
                 return false;
             }
-            return true;
         }
         return false;
     }
 
     private boolean validateMonths(String startMonth, String endMonth){
-
         try{
             startMonthAge = Integer.parseInt(startMonth);
             endMonthAge = Integer.parseInt(endMonth);
         } catch(NumberFormatException p){
             return false;
         }
-
         return true;
-
-
     }
 
     public Integer getResultCount() {
         return resultCount;
     }
 
-    public void setResultCount(Integer resultCount) {
-        this.resultCount = resultCount;
-    }
-
     public String getLowerValue() {
         return lowerValue;
-    }
-
-    public void setLowerValue(String lowerValue) {
-        this.lowerValue = lowerValue;
     }
 
     public String getHigherValue() {
         return higherValue;
     }
 
-    public void setHigherValue(String higherValue) {
-        this.higherValue = higherValue;
-    }
 
-    public Integer getStartMonthAge() {
-        return startMonthAge;
-    }
-
-    public void setStartMonthAge(Integer startMonthAge) {
-        this.startMonthAge = startMonthAge;
-    }
-
-    public Integer getEndMonthAge() {
-        return endMonthAge;
-    }
-
-    public void setEndMonthAge(Integer endMonthAge) {
-        this.endMonthAge = endMonthAge;
-    }
-
-    public OrdersRepository getRepository() {
-        return repository;
-    }
-
-    public void setRepository(OrdersRepository repository) {
-        this.repository = repository;
-    }
 }
