@@ -61,10 +61,10 @@ public class OrdersCalculator extends Thread {
         try{
             startMonthAge = Integer.parseInt(startMonth);
             endMonthAge = Integer.parseInt(endMonth);
+            return true;
         } catch(NumberFormatException p){
             return false;
         }
-        return true;
     }
 
     public Integer getResultCount() {
