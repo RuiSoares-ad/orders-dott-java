@@ -54,8 +54,7 @@ public class OrdersCalculator extends Thread {
             }catch(NumberFormatException ex){
                 return false;
             }
-        }
-        return false;
+        } else {return false;}
     }
 
     private boolean validateMonths(String startMonth, String endMonth){
